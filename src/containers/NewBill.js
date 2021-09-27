@@ -15,10 +15,34 @@ export default class NewBill {
     this.fileName = null
     new Logout({ document, localStorage, onNavigate })
   }
+
+  checkFileExtension = (path) => {
+    var basename = path.split(/[\\/]/).pop(), // extract file name from full path ...
+      // (supports `\\` and `/` separators)
+      pos = basename.lastIndexOf("."); // get last position of `.`
+
+    if (basename === "" || pos < 1) return false; // return false if file name is empty or `.` not found (-1) or comes first (0)
+
+    if (basename.slice(pos + 1).match(/(png|jpg|jpeg)/g)) {
+      return true;
+    } else {
+      return false;
+    } // return true if match to regex
+  }
+
   handleChangeFile = e => {
-    const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
+    
+    const input = this.document.querySelector(`input[data-testid="file"]`);
+    const file = input.files[0];
+
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
+
+    if (!this.checkFileExtension(fileName)) {
+      input.value = "";
+      return alert("Veuillez insérer un justificatif au format .jpg, .jpeg ou .png ");
+    }
+
     this.firestore
       .storage
       .ref(`justificatifs/${fileName}`)
