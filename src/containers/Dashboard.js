@@ -131,7 +131,8 @@ export default class {
   }
 
   handleShowTickets(e, bills, index) {
-    if (this.index === undefined || this.index !== index) this.index = index
+    if (this.index !== undefined || this.index !== index) this.index = index
+    console.log(this[index])
     if (this[index]) {
       this[index] = false;
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)'})
