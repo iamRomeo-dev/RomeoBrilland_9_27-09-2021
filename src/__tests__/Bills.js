@@ -1,8 +1,8 @@
-import { screen, fireEvent } from "@testing-library/dom";
+import { screen } from "@testing-library/dom";
 import { localStorageMock } from "../__mocks__/localStorage.js";
 import BillsUI from "../views/BillsUI.js";
 import { bills } from "../fixtures/bills.js";
-import { ROUTES, ROUTES_PATH } from "../constants/routes";
+import { ROUTES_PATH } from "../constants/routes";
 import Router from "../app/Router";
 import Bills from "../containers/Bills.js";
 import firebase from "../__mocks__/firebase";
@@ -78,7 +78,7 @@ describe("Given I am connected as Employee and I am on Bills page", () => {
 // test d'intégration GET
 describe("Given I am a user connected as Employee", () => {
   describe("When I navigate to Bills UI", () => {
-    test("fetches bills from mock API GET", async () => {
+    test("fetches bills from  API GET", async () => {
       const getSpy = jest.spyOn(firebase, "get");
       const bills = await firebase.get();
       expect(getSpy).toHaveBeenCalledTimes(1);
@@ -97,9 +97,9 @@ describe("Given I am a user connected as Employee", () => {
       firebase.get.mockImplementationOnce(() =>
         Promise.reject(new Error("Erreur 500"))
       );
-      const html = BillsUI({ error: "Erreur 404" });
+      const html = BillsUI({ error: "Erreur 500" });
       document.body.innerHTML = html;
-      const message = await screen.getByText(/Erreur 404/);
+      const message = await screen.getByText(/Erreur 500/);
       expect(message).toBeTruthy();
     });
   });
